@@ -34,7 +34,7 @@ namespace StepAway
             // needed for world creation
             if (Config.Instance == null)
             {
-                if (pawn.RaceProps.Humanlike && (pawn.Faction.IsPlayer || !pawn.Faction.HostileTo(Faction.OfPlayer)))
+                if (pawn.RaceProps.Humanlike && !pawn.IsPrisoner)
                 {
                     pps.medCare = MedicalCareCategory.Best;
                 }
