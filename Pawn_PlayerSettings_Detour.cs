@@ -31,6 +31,20 @@ namespace StepAway
                 return;
             }
 
+            // needed for world creation
+            if (Config.Instance == null)
+            {
+                if (pawn.RaceProps.Humanlike && (pawn.Faction.IsPlayer || !pawn.Faction.HostileTo(Faction.OfPlayer)))
+                {
+                    pps.medCare = MedicalCareCategory.Best;
+                }
+                else
+                {
+                    pps.medCare = MedicalCareCategory.NoMeds;
+                }
+                return;
+            }
+
             if (pawn.RaceProps.Humanlike)
             {
                 if (pawn.Faction.IsPlayer)
