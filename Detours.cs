@@ -38,7 +38,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Verse;
 
-namespace CommunityCoreLibrary_ImTheWorkerNow
+namespace CommunityCoreLibrary_StepAway
 {
     
     public static class Detours
@@ -53,7 +53,7 @@ namespace CommunityCoreLibrary_ImTheWorkerNow
 
             Performs detours, spits out basic logs and warns if a method is detoured multiple times.
         **/
-        public static unsafe bool TryDetourFromTo ( MethodInfo source, MethodInfo destination )
+        public static unsafe bool TryDetourFromTo ( MethodBase source, MethodBase destination )
         {
             // error out on null arguments
             if( source == null )
