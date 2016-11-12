@@ -80,6 +80,7 @@
     <Compile Include="Detours.cs" />
     <Compile Include="Dialog_MedicalDefaults.cs" />
     <Compile Include="MedicalCareUtility_Detour.cs" />
+    <Compile Include="Pawn_Detour.cs" />
     <Compile Include="Pawn_PlayerSettings_Detour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />

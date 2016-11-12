@@ -31,6 +31,16 @@ namespace StepAway
                         return;
                     }
                 }
+
+                {
+                    MethodInfo method1 = typeof(Verse.Pawn).GetMethod("SetFaction", BindingFlags.Instance | BindingFlags.Public);
+                    MethodInfo method2 = typeof(Pawn_Detour).GetMethod("SetFaction", BindingFlags.Static | BindingFlags.Public);
+                    if (!Detours.TryDetourFromTo(method1, method2))
+                    {
+                        Log.Error("EVERYTHING IS BROKEN 3");
+                        return;
+                    }
+                }
             }
             catch (Exception)
             {
