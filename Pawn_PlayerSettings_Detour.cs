@@ -32,8 +32,7 @@ namespace StepAway
             }
 
             // needed for world creation, loading
-            // probably overkill, honestly
-            if (Config.Instance == null || Find.Map == null || Find.FactionManager == null || Find.GameInitData == null || Find.GameInitData.playerFaction == null)
+            if (Config.Instance == null || Find.Map == null || Find.FactionManager == null)
             {
                 if (pawn.RaceProps.Humanlike && !pawn.IsPrisoner)
                 {
