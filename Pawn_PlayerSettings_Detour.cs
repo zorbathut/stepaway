@@ -47,11 +47,11 @@ namespace StepAway
 
             if (pawn.RaceProps.Humanlike)
             {
-                if (pawn.Faction.IsPlayer)
+                if (pawn.Faction != null && pawn.Faction.IsPlayer)
                 {
                     pps.medCare = Config.Instance.care_PlayerHuman;
                 }
-                else if (!pawn.Faction.HostileTo(Faction.OfPlayer))
+                else if (pawn.Faction == null || !pawn.Faction.HostileTo(Faction.OfPlayer))
                 {
                     pps.medCare = Config.Instance.care_AllyHuman;
                 }
@@ -62,11 +62,11 @@ namespace StepAway
             }
             else
             {
-                if (pawn.Faction.IsPlayer)
+                if (pawn.Faction != null && pawn.Faction.IsPlayer)
                 {
                     pps.medCare = Config.Instance.care_PlayerAnimal;
                 }
-                else if (!pawn.Faction.HostileTo(Faction.OfPlayer))
+                else if (pawn.Faction == null || !pawn.Faction.HostileTo(Faction.OfPlayer))
                 {
                     pps.medCare = Config.Instance.care_AllyAnimal;
                 }
