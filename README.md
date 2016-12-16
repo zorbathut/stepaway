@@ -37,4 +37,6 @@ This lets you set global defaults for colonists, friendlies, and enemies, plus d
 
 Does not require a new save game - this can be transparently added and removed from any savegame you already have. Note that adding it will not automatically change settings globally (but there's a button for that) and that removing it from a game will delete your default medicine preferences; you'll have to reset them if you choose to re-add the mod.
 
+-- If you like this, toss me a buck or two on Patreon: https://www.patreon.com/ZorbaTHut -- 
+
 -- Visit https://ludeon.com/forums/index.php?topic=26623.msg269335#msg269335 for more info and other mods --
