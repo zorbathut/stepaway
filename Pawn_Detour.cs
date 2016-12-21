@@ -27,17 +27,24 @@ namespace StepAway
             {
                 pawn.guest.SetGuestStatus(null, false);
             }
-            Find.MapPawns.DeRegisterPawn(pawn);
-            Find.PawnDestinationManager.RemovePawnFromSystem(pawn);
-            Find.DesignationManager.RemoveAllDesignationsOn(pawn, false);
+            if (pawn.Spawned)
+            {
+                pawn.Map.mapPawns.DeRegisterPawn(pawn);
+                pawn.Map.pawnDestinationManager.RemovePawnFromSystem(pawn);
+                pawn.Map.designationManager.RemoveAllDesignationsOn(pawn, false);
+            }
             if (newFaction == Faction.OfPlayer || pawn.Faction == Faction.OfPlayer)
             {
-                Find.ColonistBar.MarkColonistsListDirty();
+                Find.ColonistBar.MarkColonistsDirty();
             }
             Lord lord = pawn.GetLord();
             if (lord != null)
             {
                 lord.Notify_PawnLost(pawn, PawnLostCondition.ChangedFaction);
+            }
+            if (pawn.Faction != null && pawn.Faction.leader == pawn)
+            {
+                pawn.Faction.Notify_LeaderLost();
             }
             if (newFaction == Faction.OfPlayer && pawn.RaceProps.Humanlike)
             {
@@ -62,11 +69,11 @@ namespace StepAway
             {
                 pawn.drafter.Drafted = false;
             }
-            Reachability.ClearCache();
+            ReachabilityUtility.ClearCache();
             pawn.health.surgeryBills.Clear();
             if (pawn.Spawned)
             {
-                Find.MapPawns.RegisterPawn(pawn);
+                pawn.Map.mapPawns.RegisterPawn(pawn);
             }
             pawn.GenerateNecessaryName();
             if (pawn.playerSettings != null)
@@ -78,9 +85,20 @@ namespace StepAway
             {
                 pawn.needs.mood.thoughts.situational.Notify_SituationalThoughtsDirty();
             }
-            Find.AttackTargetsCache.UpdateTarget(pawn);
+            if (pawn.Spawned)
+            {
+                pawn.Map.attackTargetsCache.UpdateTarget(pawn);
+            }
             Find.GameEnder.CheckGameOver();
             AddictionUtility.CheckDrugAddictionTeachOpportunity(pawn);
+            if (pawn.needs != null)
+            {
+                pawn.needs.AddOrRemoveNeedsAsAppropriate();
+            }
+            if (pawn.playerSettings != null)
+            {
+                pawn.playerSettings.Notify_FactionChanged();
+            }
         }
     }
 }

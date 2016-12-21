@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HugsLib.Utils;
+using System;
 using System.Reflection;
 using UnityEngine;
 using RimWorld;
@@ -12,7 +13,7 @@ namespace StepAway
         public static void Pawn_PlayerSettings(this Pawn_PlayerSettings pps, Pawn pawn)
         {
             pps.SetFieldViaReflection("pawn", pawn);
-            if (Current.ProgramState == ProgramState.MapPlaying)
+            if (Current.ProgramState == ProgramState.Playing)
             {
                 pps.joinTick = Find.TickManager.TicksGame;
             }
@@ -24,6 +25,16 @@ namespace StepAway
             ResetPPSMedicalCare(pps, pawn);
         }
 
+        public static void Notify_FactionChanged(Pawn_PlayerSettings pps)
+        {
+            ResetPPSMedicalCare(pps, pps.GetFieldViaReflection<Pawn>("pawn"));
+        }
+
+        public static void Notify_MadePrisoner(Pawn_PlayerSettings pps)
+        {
+            Notify_FactionChanged(pps);
+        }
+
         public static void ResetPPSMedicalCare(Pawn_PlayerSettings pps, Pawn pawn)
         {
             if (pps == null || pawn == null)
@@ -31,16 +42,15 @@ namespace StepAway
                 return;
             }
 
+            Config config = UtilityWorldObjectManager.GetUtilityWorldObject<Config>();
+
             // needed for world creation, loading
-            if (Config.Instance == null || Find.Map == null || Find.FactionManager == null)
+            if (config == null || Find.FactionManager == null)
             {
-                if (pawn.RaceProps.Humanlike && !pawn.IsPrisoner)
+                pps.medCare = MedicalCareCategory.HerbalOrWorse;
+                if (pawn.IsColonist && !pawn.IsPrisoner && !pawn.RaceProps.Animal)
                 {
                     pps.medCare = MedicalCareCategory.Best;
-                }
-                else
-                {
-                    pps.medCare = MedicalCareCategory.NoMeds;
                 }
                 return;
             }
@@ -49,30 +59,37 @@ namespace StepAway
             {
                 if (pawn.Faction != null && pawn.Faction.IsPlayer)
                 {
-                    pps.medCare = Config.Instance.care_PlayerHuman;
+                    if (pawn.IsPrisoner)
+                    {
+                        pps.medCare = config.care_PrisonerHuman;
+                    }
+                    else
+                    {
+                        pps.medCare = config.care_PlayerHuman;
+                    }
                 }
                 else if (pawn.Faction == null || !pawn.Faction.HostileTo(Faction.OfPlayer))
                 {
-                    pps.medCare = Config.Instance.care_AllyHuman;
+                    pps.medCare = config.care_AllyHuman;
                 }
                 else
                 {
-                    pps.medCare = Config.Instance.care_EnemyHuman;
+                    pps.medCare = config.care_EnemyHuman;
                 }
             }
             else
             {
                 if (pawn.Faction != null && pawn.Faction.IsPlayer)
                 {
-                    pps.medCare = Config.Instance.care_PlayerAnimal;
+                    pps.medCare = config.care_PlayerAnimal;
                 }
                 else if (pawn.Faction == null || !pawn.Faction.HostileTo(Faction.OfPlayer))
                 {
-                    pps.medCare = Config.Instance.care_AllyAnimal;
+                    pps.medCare = config.care_AllyAnimal;
                 }
                 else
                 {
-                    pps.medCare = Config.Instance.care_EnemyAnimal;
+                    pps.medCare = config.care_EnemyAnimal;
                 }
             }
         }

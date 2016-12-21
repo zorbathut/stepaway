@@ -1,3 +1,4 @@
+using HugsLib.Utils;
 using RimWorld;
 using System;
 using System.Collections;
@@ -15,7 +16,7 @@ namespace StepAway
 		{
 			get
 			{
-				return new Vector2(500f, 400f);
+				return new Vector2(550f, 400f);
 			}
 		}
 
@@ -43,16 +44,18 @@ namespace StepAway
 
             float hgap = 40;
 
-            float hposA = 20;
-            float hposB = 100;
+            float hposA = 10;
+            float hposB = 160;
             float hposC = hposB + MedicalCareUtility.CareSetterWidth + hgap;
 
-            float hwidthA = 60;
+            float hwidthA = 120;
             float hwidthB = MedicalCareUtility.CareSetterWidth;
             float hwidthC = MedicalCareUtility.CareSetterWidth;
 
             try
             {
+                Config config = UtilityWorldObjectManager.GetUtilityWorldObject<Config>();
+
                 MedicalCareUtility_Detour.HorribleHackWithinDefaultDialog = true;
 
                 listing_Standard.Gap(20);
@@ -66,29 +69,35 @@ namespace StepAway
                 {
                     Rect title = listing_Standard.GetRect(stdHeight);
                     Widgets.Label(new Rect(hposA, title.y, hwidthA, stdHeight), "Colonist");
-                    MedicalCareUtility.MedicalCareSetter(new Rect(hposB, title.y, hwidthB, stdHeight), ref Config.Instance.care_PlayerHuman);
-                    MedicalCareUtility.MedicalCareSetter(new Rect(hposC, title.y, hwidthC, stdHeight), ref Config.Instance.care_PlayerAnimal);
+                    MedicalCareUtility.MedicalCareSetter(new Rect(hposB, title.y, hwidthB, stdHeight), ref config.care_PlayerHuman);
+                    MedicalCareUtility.MedicalCareSetter(new Rect(hposC, title.y, hwidthC, stdHeight), ref config.care_PlayerAnimal);
+                }
+
+                {
+                    Rect title = listing_Standard.GetRect(stdHeight);
+                    Widgets.Label(new Rect(hposA, title.y, hwidthA, stdHeight), "Colonist Prisoner");
+                    MedicalCareUtility.MedicalCareSetter(new Rect(hposB, title.y, hwidthB, stdHeight), ref config.care_PrisonerHuman);
                 }
 
                 {
                     Rect title = listing_Standard.GetRect(stdHeight);
                     Widgets.Label(new Rect(hposA, title.y, hwidthA, stdHeight), "Ally");
-                    MedicalCareUtility.MedicalCareSetter(new Rect(hposB, title.y, hwidthB, stdHeight), ref Config.Instance.care_AllyHuman);
-                    MedicalCareUtility.MedicalCareSetter(new Rect(hposC, title.y, hwidthC, stdHeight), ref Config.Instance.care_AllyAnimal);
+                    MedicalCareUtility.MedicalCareSetter(new Rect(hposB, title.y, hwidthB, stdHeight), ref config.care_AllyHuman);
+                    MedicalCareUtility.MedicalCareSetter(new Rect(hposC, title.y, hwidthC, stdHeight), ref config.care_AllyAnimal);
                 }
 
                 {
                     Rect title = listing_Standard.GetRect(stdHeight);
                     Widgets.Label(new Rect(hposA, title.y, hwidthA, stdHeight), "Enemy");
-                    MedicalCareUtility.MedicalCareSetter(new Rect(hposB, title.y, hwidthB, stdHeight), ref Config.Instance.care_EnemyHuman);
-                    MedicalCareUtility.MedicalCareSetter(new Rect(hposC, title.y, hwidthC, stdHeight), ref Config.Instance.care_EnemyAnimal);
+                    MedicalCareUtility.MedicalCareSetter(new Rect(hposB, title.y, hwidthB, stdHeight), ref config.care_EnemyHuman);
+                    MedicalCareUtility.MedicalCareSetter(new Rect(hposC, title.y, hwidthC, stdHeight), ref config.care_EnemyAnimal);
                 }
 
                 listing_Standard.Gap(50);
 
                 if (listing_Standard.ButtonText("Reset all pawns to these values"))
                 {
-                    foreach (Pawn p in Find.MapPawns.AllPawns)
+                    foreach (Pawn p in PawnsFinder.AllMapsAndWorld_Alive)
                     {
                         Pawn_PlayerSettings_Detour.ResetPPSMedicalCare(p.playerSettings, p);
                     }
