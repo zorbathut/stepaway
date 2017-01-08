@@ -33,11 +33,31 @@ namespace StepAway
                 }
 
                 {
+                    MethodInfo method1 = typeof(RimWorld.Pawn_PlayerSettings).GetMethod("Notify_MadePrisoner", BindingFlags.Instance | BindingFlags.Public);
+                    MethodInfo method2 = typeof(Pawn_PlayerSettings_Detour).GetMethod("Notify_MadePrisoner", BindingFlags.Static | BindingFlags.Public);
+                    if (!Detours.TryDetourFromTo(method1, method2))
+                    {
+                        Log.Error("EVERYTHING IS BROKEN 3");
+                        return;
+                    }
+                }
+
+                {
+                    MethodInfo method1 = typeof(RimWorld.Pawn_PlayerSettings).GetMethod("Notify_FactionChanged", BindingFlags.Instance | BindingFlags.Public);
+                    MethodInfo method2 = typeof(Pawn_PlayerSettings_Detour).GetMethod("Notify_FactionChanged", BindingFlags.Static | BindingFlags.Public);
+                    if (!Detours.TryDetourFromTo(method1, method2))
+                    {
+                        Log.Error("EVERYTHING IS BROKEN 4");
+                        return;
+                    }
+                }
+
+                {
                     MethodInfo method1 = typeof(Verse.Pawn).GetMethod("SetFaction", BindingFlags.Instance | BindingFlags.Public);
                     MethodInfo method2 = typeof(Pawn_Detour).GetMethod("SetFaction", BindingFlags.Static | BindingFlags.Public);
                     if (!Detours.TryDetourFromTo(method1, method2))
                     {
-                        Log.Error("EVERYTHING IS BROKEN 3");
+                        Log.Error("EVERYTHING IS BROKEN 5");
                         return;
                     }
                 }
