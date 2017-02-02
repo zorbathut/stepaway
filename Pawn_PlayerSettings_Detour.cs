@@ -22,7 +22,10 @@ namespace StepAway
                 pps.joinTick = 0;
             }
 
-            ResetPPSMedicalCare(pps, pawn);
+            if (pawn.Spawned && !pawn.Dead)
+            {
+                ResetPPSMedicalCare(pps, pawn);
+            }
         }
 
         public static void Notify_FactionChanged(Pawn_PlayerSettings pps)
